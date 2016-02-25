@@ -53,6 +53,8 @@ class Request
         $this->body = $body;
         $this->url = $url;
 
+        $this->requestOptions = array_repace($this->requestOptions, $options);
+
         return $this;
     }
 
