@@ -59,7 +59,7 @@ class Request
     }
 
     /**
-     * Staticly create a new CurlHelper instance.
+     * Staticly create a new Request instance.
      *
      * @param  string $method
      * @param  string $url
@@ -131,7 +131,7 @@ class Request
     }
 
     /**
-     * Create a new CurlHelper instance for quick access.
+     * Create a new Request instance for quick access.
      *
      * @param  string $method
      * @param  string $body
