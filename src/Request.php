@@ -292,7 +292,7 @@ class Request
     {
         $request = curl_init();
 
-        $this->setOption(CURLOPT_URL, $this->url);
+        $this->setOption(CURLOPT_URL, urlencode($this->url));
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
         $this->setOption(CURLOPT_HTTPHEADER, $this->getFormattedHeaderArray());
         $this->setOption(CURLOPT_COOKIE, $this->getCookieString());
@@ -300,6 +300,7 @@ class Request
         if ($this->method !== 'GET') {
             $this->setOption(CURLOPT_POST, true);
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
+
             $this->putHeader('Content-Type', $this->sendsType);
             $this->putHeader('Content-Length', strlen($this->body));
         }
