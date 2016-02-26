@@ -2,6 +2,7 @@
 
 namespace Fazed\FazedHttp;
 
+use Exception;
 use Fazed\FazedHttp\HeaderTrait;
 use Fazed\FazedHttp\CookieTrait;
 
@@ -37,9 +38,10 @@ class Response
     /**
      * Create a new Response instance.
      * 
-     * @param  string $data
-     * @param  string $expectedType
-     * @param  cURL   $channel
+     * @param  string   $data
+     * @param  string   $expectedType
+     * @param  resource $channel
+     * @throws Exception
      */
     public function __construct($data, $expectedType, &$channel)
     {
@@ -51,6 +53,10 @@ class Response
         $this->rawHeader = trim(substr($data, 0, $this->headerSize));
         $this->expectedType = $expectedType;
 
+        if ($this->getHttpCode() === 304) {
+            throw new Exception('The connection to the server timed out.');
+        }
+
         $this->getHeadersFromResponse();
         $this->getCookiesFromResponse();
 
@@ -60,9 +66,9 @@ class Response
     /**
      * Staticly create a new Response instance.
      *
-     * @param  string $data
-     * @param  string $expectedType
-     * @param  cURL   $channel
+     * @param  string   $data
+     * @param  string   $expectedType
+     * @param  resource $channel
      * @return $this
      */
     public static function make($data, $expectedType, &$channel)

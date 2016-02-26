@@ -15,19 +15,10 @@ class Request
      */
     private $requestOptions = [
         CURLOPT_HEADER         => true,
+        CURLOPT_TIMEOUT        => 10,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
     ];
-
-    /**
-     * @var string
-     */
-    private $expectsType;
-
-    /**
-     * @var string
-     */
-    private $sendsType;
 
     /**
      * @var string
@@ -43,6 +34,16 @@ class Request
      * @var string
      */
     private $body;
+
+    /**
+     * @var string
+     */
+    private $expectsType;
+
+    /**
+     * @var string
+     */
+    private $sendsType;
 
     /**
      * Create a new Request instance.
@@ -154,6 +155,19 @@ class Request
     }
 
     /**
+     * Set the referer of the request.
+     *
+     * @param  string $referer
+     * @return $this
+     */
+    public function setReferer($referer)
+    {
+        $this->setOption(CURLOPT_REFERER, $referer);
+
+        return $this;
+    }
+
+    /**
      * Set the request content mimetype.
      *
      * @param  string $type
@@ -260,7 +274,7 @@ class Request
      * @param  array $options
      * @return $this
      */
-    public function setOptions($options = [])
+    public function setOptions($options)
     {
         foreach ($options as $key=>$value) {
             $this->requestOptions[$key] = $value;
