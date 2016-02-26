@@ -51,8 +51,8 @@ class Response
         $this->rawHeader = trim(substr($data, 0, $this->headerSize));
         $this->expectedType = $expectedType;
 
-        $this->getHeadersFromResponse($data, $this->headerSize);
-        $this->getCookiesFromResponse($data, $this->headerSize);
+        $this->getHeadersFromResponse();
+        $this->getCookiesFromResponse();
 
         curl_close($channel);
     }
@@ -98,6 +98,16 @@ class Response
     public function getBody()
     {
         return $this->formatByExpected();
+    }
+
+    /**
+     * Return the http code of the response.
+     *
+     * @return mixed
+     */
+    public function getHttpCode()
+    {
+        return $this->httpCode;
     }
 
     /**

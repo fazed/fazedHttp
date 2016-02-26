@@ -292,7 +292,7 @@ class Request
     {
         $request = curl_init();
 
-        $this->setOption(CURLOPT_URL, urlencode($this->url));
+        $this->setOption(CURLOPT_URL, $this->url);
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
         $this->setOption(CURLOPT_HTTPHEADER, $this->getFormattedHeaderArray());
         $this->setOption(CURLOPT_COOKIE, $this->getCookieString());
