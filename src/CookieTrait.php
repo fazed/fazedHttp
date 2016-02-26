@@ -10,6 +10,16 @@ trait CookieTrait
     private $cookieJar = [];
 
     /**
+     * Get all of the cookies in the cookiejar.
+     *
+     * @return array
+     */
+    public function getCookies()
+    {
+        return $this->cookieJar;
+    }
+
+    /**
      * Get a cookie from the cookiejar.
      *
      * @param  mixed  $cookie
@@ -137,44 +147,16 @@ trait CookieTrait
     }
 
     /**
-     * Fill up the cookiejar with cookies
-     * from an HTTP-response.
-     *
-     * @param  string  &$response
-     * @param  int     $headerSize
-     * @return $this
-     */
-    private function getCookiesFromResponse(&$response, $headerSize)
-    {
-        $actualHeader = substr($response, 0, $headerSize);
-
-        if (preg_match_all('/(?:Set-Cookie:\s)(.+)\=(.+)?\;/', $actualHeader, $matches) !== false) {
-            $this->emptyCookieJar();
-
-            foreach ($matches as $cookie) {
-                if (sizeof($cookie)) {
-                    $this->appendCookie($cookie[0], $cookie[1] ?? '');
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Create a string of the available cookies.
      *
-     * @param  bool  $withSet
      * @return string
      */
-    private function getCookieString($withSet = true)
+    private function getCookieString()
     {
         $cookieString = '';
 
         foreach ($this->cookieJar as $cookie=>$value) {
-            $cookieString .= sprintf('%sCookie: %s=%s;',
-                ($withSet ? 'Set-' : ''), $cookie, $value
-            );
+            $cookieString .= sprintf('Set-Cookie: %s=%s;', $cookie, $value);
         }
 
         return $cookieString;

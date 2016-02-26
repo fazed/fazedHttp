@@ -15,6 +15,16 @@ trait HeaderTrait
     private $headerCollection = [];
 
     /**
+     * Get all of the headers in the header collection.
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headerCollection;
+    }
+
+    /**
      * Get a header from the header collection.
      *
      * @param  mixed  $header
@@ -137,37 +147,6 @@ trait HeaderTrait
     public function emptyHeaderJar()
     {
         $this->headerCollection = [];
-
-        return $this;
-    }
-
-    /**
-     * Fill up the header collection with headers
-     * from an HTTP-response.
-     *
-     * @param  string  &$response
-     * @param  int     $headerSize
-     * @return $this
-     */
-    private function getHeadersFromResponse(&$response, $headerSize)
-    {
-        $actualHeader = substr($response, 0, $headerSize);
-        $headerLines = explode("\r\n\r\n", $actualHeader);
-
-        foreach ($headerLines as $headerLine) {
-            $header = explode("\r\n", $headerLine);
-
-            foreach ($header as $value) {
-                $firstColonIndex = strpos($value, ':');
-
-                if ($firstColonIndex !== false) {
-                    $headerKey = trim(substr($value, 0, $firstColonIndex));
-                    $headerValue = trim(substr($value, ($firstColonIndex + 1)));
-
-                    $this->putHeader($headerKey, $headerValue);
-                }
-            }
-        }
 
         return $this;
     }

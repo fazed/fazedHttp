@@ -22,7 +22,12 @@ class Request
     /**
      * @var string
      */
-    private $expects;
+    private $expectsType;
+
+    /**
+     * @var string
+     */
+    private $sendsType;
 
     /**
      * @var string
@@ -53,7 +58,7 @@ class Request
         $this->body = $body;
         $this->url = $url;
 
-        $this->requestOptions = array_repace($this->requestOptions, $options);
+        $this->requestOptions = array_replace($this->requestOptions, $options);
 
         return $this;
     }
@@ -75,14 +80,15 @@ class Request
      * Send a GET request with minimal configuration.
      *
      * @param  string $url
+     * @param  string $body
      * @param  array  $headers
      * @param  array  $cookies
      * @param  array  $options
      * @return Response
      */
-    public static function sendGetRequest($url, $headers = [], $cookies = [], $options = [])
+    public static function sendGetRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest('GET', $url, '', $headers, $cookies, $options)->send();
+        return static::makeQuickRequest('GET', $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -148,14 +154,51 @@ class Request
     }
 
     /**
-     * Set the expected response format.
+     * Set the request content mimetype.
      *
-     * @param  string $expectation
+     * @param  string $type
      * @return $this
      */
-    public function expects($expectation)
+    public function sends($type)
     {
-        $this->expects = $expectation;
+        $this->sendsType = $type;
+
+        return $this;
+    }
+
+    /**
+     * Set the request content mimetype to JSON.
+     *
+     * @return $this
+     */
+    public function sendsJson()
+    {
+        $this->sends('application/json');
+
+        return $this;
+    }
+
+    /**
+     * Set the request content mimetype to XML.
+     *
+     * @return $this
+     */
+    public function sendsXml()
+    {
+        $this->sends('application/xml');
+
+        return $this;
+    }
+
+    /**
+     * Set the expected response format.
+     *
+     * @param  string $type
+     * @return $this
+     */
+    public function expects($type)
+    {
+        $this->expectsType = $type;
 
         return $this;
     }
@@ -167,7 +210,19 @@ class Request
      */
     public function expectsJson()
     {
-        $this->expects = 'json';
+        $this->expectsType('json');
+
+        return $this;
+    }
+
+    /**
+     * Set the expected response format to XML.
+     *
+     * @return $this
+     */
+    public function expectsXml()
+    {
+        $this->expectsType('xml');
 
         return $this;
     }
@@ -225,7 +280,7 @@ class Request
 
         $response = curl_exec($request);
 
-        return new Response($response, $this->expects, $request);
+        return Response::make($response, $this->expectsType, $request);
     }
 
     /**
@@ -245,6 +300,7 @@ class Request
         if ($this->method !== 'GET') {
             $this->setOption(CURLOPT_POST, true);
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
+            $this->putHeader('Content-Type', $this->sendsType);
             $this->putHeader('Content-Length', strlen($this->body));
         }
 
