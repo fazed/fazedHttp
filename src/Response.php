@@ -126,7 +126,7 @@ class Response
     }
 
     /**
-     * Fill up the header collection with headers from the response.
+     * Add headers from the response to the header collection.
      *
      * @return $this
      */
@@ -153,7 +153,7 @@ class Response
     }
 
     /**
-     * Fill up the cookiejar with cookies from the response.
+     * Put cookies from the response into the cookiejar.
      * 
      * @return $this
      */
@@ -164,7 +164,7 @@ class Response
 
             foreach ($cookies as $cookie) {
                 if (sizeof($cookie)) {
-                    $this->appendCookie($cookie[0], $cookie[1] ?? '');
+                    $this->putCookie($cookie[0], $cookie[1] ?? '');
                 }
             }
         }
