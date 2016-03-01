@@ -328,7 +328,7 @@ class Request
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
 
             $this->putHeader('Content-Length', strlen($this->body));
-            if ($this->sendsType) $this->putHeader('Content-Type', $this->sendsType);
+            if ($this->sendsType) $this->putHeader('Content-Type', $this->resolveContentType());
         }
 
         if (sizeof($this->getCookies())) $this->setOption(CURLOPT_COOKIE, $this->getCookieString());

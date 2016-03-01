@@ -160,7 +160,9 @@ class Response
                     $headerKey = trim(substr($value, 0, $firstColonIndex));
                     $headerValue = trim(substr($value, ($firstColonIndex + 1)));
 
-                    $this->putHeader($headerKey, $headerValue);
+                    if ($headerKey !== 'Set-Cookie') {
+                        $this->putHeader($headerKey, $headerValue);
+                    }
                 }
             }
         }
@@ -175,12 +177,12 @@ class Response
      */
     private function getCookiesFromResponse()
     {
-        if (preg_match_all('/(?:Set-Cookie:\s)(.+)\=(.+)?\;/', $this->rawHeader, $cookies) !== false) {
+        if (preg_match_all('/(?:Set-Cookie:\s)(.+)\=(.+)?\;/', $this->rawHeader, $cookies, PREG_SET_ORDER) !== false) {
             $this->emptyCookieJar();
 
             foreach ($cookies as $cookie) {
                 if (sizeof($cookie)) {
-                    $this->putCookie($cookie[0], $cookie[1] ?? '');
+                    $this->putCookie($cookie[1], $cookie[2] ?: '');
                 }
             }
         }
