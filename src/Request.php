@@ -99,7 +99,7 @@ class Request
      */
     public static function sendGetRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(REQUEST_GET, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::REQUEST_GET, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -114,7 +114,7 @@ class Request
      */
     public static function sendPostRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(REQUEST_POST, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::REQUEST_POST, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -129,7 +129,7 @@ class Request
      */
     public static function sendPutRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(REQUEST_PUT, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::REQUEST_PUT, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -144,7 +144,7 @@ class Request
      */
     public static function sendDeleteRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(REQUEST_DELETE, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::REQUEST_DELETE, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -324,7 +324,7 @@ class Request
         $this->setOption(CURLOPT_URL, $this->url);
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
 
-        if ($this->method !== REQUEST_GET) {
+        if ($this->method !== static::REQUEST_GET) {
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
 
             $this->putHeader('Content-Length', strlen($this->body));
