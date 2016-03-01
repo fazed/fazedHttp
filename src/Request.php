@@ -2,6 +2,7 @@
 
 namespace Fazed\FazedHttp;
 
+use Exception;
 use Fazed\FazedHttp\Response;
 use Fazed\FazedHttp\HeaderTrait;
 use Fazed\FazedHttp\CookieTrait;
@@ -9,6 +10,15 @@ use Fazed\FazedHttp\CookieTrait;
 class Request
 {
     use HeaderTrait, CookieTrait;
+
+    /**
+     * Constants
+     */
+    const REQUEST_GET    = 'GET';
+    const REQUEST_POST   = 'POST';
+    const REQUEST_PUT    = 'PUT';
+    const REQUEST_PATCH  = 'PATCH';
+    const REQUEST_DELETE = 'DELETE';
 
     /**
      * @var array
@@ -89,7 +99,7 @@ class Request
      */
     public static function sendGetRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest('GET', $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(REQUEST_GET, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -104,7 +114,7 @@ class Request
      */
     public static function sendPostRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest('POST', $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(REQUEST_POST, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -119,7 +129,7 @@ class Request
      */
     public static function sendPutRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest('PUT', $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(REQUEST_PUT, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -134,7 +144,7 @@ class Request
      */
     public static function sendDeleteRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest('DELETE', $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(REQUEST_DELETE, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -187,7 +197,7 @@ class Request
      */
     public function sendsJson()
     {
-        $this->sends('application/json');
+        $this->sends('json');
 
         return $this;
     }
@@ -199,7 +209,7 @@ class Request
      */
     public function sendsXml()
     {
-        $this->sends('application/xml');
+        $this->sends('xml');
 
         return $this;
     }
@@ -224,7 +234,7 @@ class Request
      */
     public function expectsJson()
     {
-        $this->expectsType('json');
+        $this->expects('json');
 
         return $this;
     }
@@ -236,7 +246,7 @@ class Request
      */
     public function expectsXml()
     {
-        $this->expectsType('xml');
+        $this->expects('xml');
 
         return $this;
     }
@@ -287,12 +297,17 @@ class Request
      * Execute the request.
      *
      * @return mixed
+     * @throws Exception
      */
     public function send()
     {
         $request = $this->prepareRequest();
 
         $response = curl_exec($request);
+
+        if ($errorNo = curl_errno($request)) {
+            throw new Exception(sprintf('An error occured: %s', curl_error($request)));
+        }
 
         return Response::make($response, $this->expectsType, $request);
     }
@@ -308,19 +323,34 @@ class Request
 
         $this->setOption(CURLOPT_URL, $this->url);
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
-        $this->setOption(CURLOPT_HTTPHEADER, $this->getFormattedHeaderArray());
-        $this->setOption(CURLOPT_COOKIE, $this->getCookieString());
 
-        if ($this->method !== 'GET') {
-            $this->setOption(CURLOPT_POST, true);
+        if ($this->method !== REQUEST_GET) {
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
 
-            $this->putHeader('Content-Type', $this->sendsType);
             $this->putHeader('Content-Length', strlen($this->body));
+            if ($this->sendsType) $this->putHeader('Content-Type', $this->sendsType);
         }
+
+        if (sizeof($this->getCookies())) $this->setOption(CURLOPT_COOKIE, $this->getCookieString());
+        if (sizeof($this->getHeaders())) $this->setOption(CURLOPT_HTTPHEADER, $this->getFormattedHeaderArray());
 
         curl_setopt_array($request, $this->requestOptions);
 
         return $request;
+    }
+
+    /**
+     * Resolve the content type for the current request.
+     *
+     * @return mixed
+     */
+    private function resolveContentType()
+    {
+        switch ($this->sendsType) {
+            case 'json': return 'application/json'; break;
+            case 'xml' : return 'application/xml';  break;
+        }
+
+        return null;
     }
 }
