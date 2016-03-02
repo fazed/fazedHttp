@@ -151,7 +151,7 @@ trait CookieTrait
      *
      * @return string
      */
-    private function getCookieString()
+    private function getCookieHeaderString()
     {
         $cookieString = '';
 

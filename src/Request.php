@@ -371,7 +371,7 @@ class Request
             if ($this->sendsType) $this->putHeader('Content-Type', $this->resolveContentType());
         }
 
-        if (sizeof($this->getCookies())) $this->setOption(CURLOPT_COOKIE, $this->getCookieString());
+        if (sizeof($this->getCookies())) $this->setOption(CURLOPT_COOKIE, $this->getCookieHeaderString());
         if (sizeof($this->getHeaders())) $this->setOption(CURLOPT_HTTPHEADER, $this->getFormattedHeaderArray());
 
         curl_setopt_array($request, $this->requestOptions);
