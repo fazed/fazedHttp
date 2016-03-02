@@ -170,7 +170,7 @@ trait HeaderTrait
      *
      * @return string
      */
-    private function getFormattedHeaderString()
+    private function makeFormattedHeaderString()
     {
         $formattedString = '';
 
@@ -186,7 +186,7 @@ trait HeaderTrait
      *
      * @return array
      */
-    private function getFormattedHeaderArray()
+    private function makeFormattedHeaderArray()
     {
         $formattedHeaders = [];
 
