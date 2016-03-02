@@ -6,10 +6,11 @@ use Exception;
 use Fazed\FazedHttp\Response;
 use Fazed\FazedHttp\HeaderTrait;
 use Fazed\FazedHttp\CookieTrait;
+use Fazed\FazedHttp\SecuredTrait;
 
 class Request
 {
-    use HeaderTrait, CookieTrait;
+    use HeaderTrait, CookieTrait, SecuredTrait;
 
     /**
      * Constants
@@ -357,6 +358,8 @@ class Request
     private function prepareRequest()
     {
         $request = curl_init();
+
+        $this->disableSslChecks();
 
         $this->setOption(CURLOPT_URL, $this->url);
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
