@@ -15,11 +15,11 @@ class Request
     /**
      * Constants
      */
-    const GET    = 'GET';
-    const POST   = 'POST';
-    const PUT    = 'PUT';
-    const PATCH  = 'PATCH';
-    const DELETE = 'DELETE';
+    const METHOD_GET    = 'GET';
+    const METHOD_POST   = 'POST';
+    const METHOD_PUT    = 'PUT';
+    const METHOD_PATCH  = 'PATCH';
+    const METHOD_DELETE = 'DELETE';
 
     /**
      * @var array
@@ -62,7 +62,6 @@ class Request
      * @param  string $method
      * @param  string $url
      * @param  string $body
-     * @return $this
      */
     public function __construct($method, $url, $body = '', $options = [])
     {
@@ -71,8 +70,6 @@ class Request
         $this->url = $url;
 
         $this->requestOptions = array_replace($this->requestOptions, $options);
-
-        return $this;
     }
 
     /**
@@ -85,7 +82,7 @@ class Request
      */
     public static function make($method, $url, $body = '', $options = [])
     {
-        return new self($method, $url, $body);
+        return new self($method, $url, $body, $options);
     }
 
     /**
@@ -100,7 +97,7 @@ class Request
      */
     public static function sendGetRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::GET, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::METHOD_GET, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -364,7 +361,7 @@ class Request
         $this->setOption(CURLOPT_URL, $this->url);
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
 
-        if ($this->method !== static::GET) {
+        if ($this->method !== static::METHOD_GET) {
             $this->setOption(CURLOPT_POSTFIELDS, $this->body);
 
             $this->putHeader('Content-Length', strlen($this->body));
