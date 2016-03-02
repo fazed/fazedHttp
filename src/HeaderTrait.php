@@ -15,6 +15,20 @@ trait HeaderTrait
     private $headerCollection = [];
 
     /**
+     * Set the authorization header, for humans.
+     *
+     * @param  string $type
+     * @param  string $digest
+     * @return $this
+     */
+    public function setAuthorizationHeader($type, $digest)
+    {
+        $this->putHeader('Authorization', sprintf('%s %s', $type, $digest));
+        
+        return $this;   
+    }
+
+    /**
      * Get all of the headers in the header collection.
      *
      * @return array

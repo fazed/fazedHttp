@@ -165,6 +165,30 @@ class Request
     }
 
     /**
+     * Set the HTTP-authentication method to basic.
+     *
+     * @param  string $username
+     * @param  string $password
+     * @return $this
+     */
+    public function setBasicAuthentication($username, $password)
+    {
+        return $this->prepareDefaultAuthentication(CURLAUTH_BASIC, $username, $password);
+    }
+
+    /**
+     * Set the HTTP-authentication method to digest.
+     *
+     * @param  string $username
+     * @param  string $password
+     * @return $this
+     */
+    public function setDigestAuthentication($username, $password)
+    {
+        return $this->prepareDefaultAuthentication(CURLAUTH_DIGEST, $username, $password);
+    }
+
+    /**
      * Set the referer of the request.
      *
      * @param  string $referer
@@ -173,6 +197,19 @@ class Request
     public function setReferer($referer)
     {
         $this->setOption(CURLOPT_REFERER, $referer);
+
+        return $this;
+    }
+
+    /**
+     * Set the user agent of the request.
+     *
+     * @param  string $agent
+     * @return $this
+     */
+    public function setUserAgent($agent)
+    {
+        $this->setOption(CURLOPT_USERAGENT, $agent);
 
         return $this;
     }
@@ -352,5 +389,21 @@ class Request
         }
 
         return null;
+    }
+
+    /**
+     * Set the default HTTP-authentication method.
+     *
+     * @param  int    $type
+     * @param  string $username
+     * @param  string $password
+     * @return $this
+     */
+    private function prepareDefaultAuthentication($type, $username, $password)
+    {
+        $this->setOption(CURLOPT_HTTPAUTH, $type);
+        $this->setOption(CURLOPT_USERPWD, sprintf('%s:%s', $username, $password));
+
+        return $this;
     }
 }
