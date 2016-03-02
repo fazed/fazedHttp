@@ -6,11 +6,11 @@ use Exception;
 use Fazed\FazedHttp\Response;
 use Fazed\FazedHttp\HeaderTrait;
 use Fazed\FazedHttp\CookieTrait;
-use Fazed\FazedHttp\SecuredTrait;
+use Fazed\FazedHttp\SecurityTrait;
 
 class Request
 {
-    use HeaderTrait, CookieTrait, SecuredTrait;
+    use HeaderTrait, CookieTrait, SecurityTrait;
 
     /**
      * Constants

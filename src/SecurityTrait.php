@@ -2,7 +2,7 @@
 
 namespace Fazed\FazedHttp;
 
-trait SecuredTrait
+trait SecurityTrait
 {
     /**
      * Disable the SSL check for the request.
