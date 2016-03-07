@@ -371,7 +371,7 @@ class Request
         if (sizeof($this->getCookies())) $this->setOption(CURLOPT_COOKIE, $this->makeCookieHeaderString());
         if (sizeof($this->getHeaders())) $this->setOption(CURLOPT_HTTPHEADER, $this->makeFormattedHeaderArray());
 
-        curl_setopt_array($request, $this->requestOptions);
+        $this->inflateRequestOptions($request);
 
         return $request;
     }
@@ -405,5 +405,23 @@ class Request
         $this->setOption(CURLOPT_USERPWD, sprintf('%s:%s', $username, $password));
 
         return $this;
+    }
+
+    /**
+     * Set the options for the given cURL instance.
+     *
+     * @param  resource $request
+     */
+    private function inflateRequestOptions($request)
+    {
+        if (ini_get('safe_mode')) {
+            if (array_key_exists(CURLOPT_FOLLOWLOCATION, $this->requestOptions)) {
+                unset($this->requestOptions[CURLOPT_FOLLOWLOCATION]);
+            }
+        }
+
+        foreach ($this->requestOptions as $option=>$value) {
+            curl_setopt($request, $option, $value);
+        }
     }
 }
