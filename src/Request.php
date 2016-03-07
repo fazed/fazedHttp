@@ -420,8 +420,6 @@ class Request
             }
         }
 
-        foreach ($this->requestOptions as $option=>$value) {
-            curl_setopt($request, $option, $value);
-        }
+        curl_setopt_array($request, $this->requestOptions);
     }
 }
