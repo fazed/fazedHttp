@@ -3,13 +3,10 @@
 namespace Fazed\FazedHttp;
 
 use Exception;
-use Fazed\FazedHttp\HeaderTrait;
-use Fazed\FazedHttp\CookieTrait;
+use Fazed\FazedHttp\AbstractHttp;
 
-class Response
+class Response extends AbstractHttp
 {
-    use CookieTrait, HeaderTrait;
-
     /**
      * @var string
      */
@@ -37,7 +34,7 @@ class Response
 
     /**
      * Create a new Response instance.
-     * 
+     *
      * @param  string   $data
      * @param  string   $expectedType
      * @param  resource $channel
@@ -172,7 +169,7 @@ class Response
 
     /**
      * Put cookies from the response into the cookiejar.
-     * 
+     *
      * @return $this
      */
     private function getCookiesFromResponse()

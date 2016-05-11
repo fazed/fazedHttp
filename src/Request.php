@@ -4,13 +4,12 @@ namespace Fazed\FazedHttp;
 
 use Exception;
 use Fazed\FazedHttp\Response;
-use Fazed\FazedHttp\HeaderTrait;
-use Fazed\FazedHttp\CookieTrait;
+use Fazed\FazedHttp\AbstractHttp;
 use Fazed\FazedHttp\SecurityTrait;
 
-class Request
+class Request extends AbstractHttp
 {
-    use HeaderTrait, CookieTrait, SecurityTrait;
+    use SecurityTrait;
 
     /**
      * Constants
@@ -65,9 +64,9 @@ class Request
      */
     public function __construct($method, $url, $body = '', $options = [])
     {
-        $this->method = $method;
-        $this->body = $body;
         $this->url = $url;
+        $this->body = $body;
+        $this->method = $method;
 
         $this->requestOptions = array_replace($this->requestOptions, $options);
     }
@@ -95,9 +94,9 @@ class Request
      * @param  array  $options
      * @return Response
      */
-    public static function sendGetRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function get($url, $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::METHOD_GET, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeQuickRequest(static::METHOD_GET, $url, '', $headers, $cookies, $options)->send();
     }
 
     /**
@@ -110,7 +109,7 @@ class Request
      * @param  array  $options
      * @return Response
      */
-    public static function sendPostRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function post($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
         return static::makeQuickRequest(static::POST, $url, $body, $headers, $cookies, $options)->send();
     }
@@ -125,9 +124,24 @@ class Request
      * @param  array  $options
      * @return Response
      */
-    public static function sendPutRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function put($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
         return static::makeQuickRequest(static::PUT, $url, $body, $headers, $cookies, $options)->send();
+    }
+
+    /**
+     * Send a PATCH request with minimal configuration.
+     *
+     * @param  string $url
+     * @param  string $body
+     * @param  array  $headers
+     * @param  array  $cookies
+     * @param  array  $options
+     * @return Response
+     */
+    public static function patch($url, $body = '', $headers = [], $cookies = [], $options = [])
+    {
+        return static::makeQuickRequest(static::PATCH, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -140,7 +154,7 @@ class Request
      * @param  array  $options
      * @return Response
      */
-    public static function sendDeleteRequest($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function delete($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
         return static::makeQuickRequest(static::DELETE, $url, $body, $headers, $cookies, $options)->send();
     }
@@ -155,7 +169,7 @@ class Request
      * @param  array  $options
      * @return $this
      */
-    public static function makeQuickRequest($method, $url, $body = '', $headers = [], $cookies = [], $options = [])
+    private static function makeQuickRequest($method, $url, $body = '', $headers = [], $cookies = [], $options = [])
     {
         return static::make($method, $url, $body, $options)
             ->setHeaders($headers)
@@ -418,7 +432,7 @@ class Request
     /**
      * Set the options for the given cURL instance.
      *
-     * @param  resource $request
+     * @param resource $request
      */
     private function inflateRequestOptions($request)
     {
