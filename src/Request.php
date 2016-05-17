@@ -387,11 +387,11 @@ class Request extends AbstractHttp implements RequestContract
             }
         }
 
-        if (sizeof($this->getCookies())) {
+        if (count($this->getCookies())) {
             $this->setOption(CURLOPT_COOKIE, $this->makeCookieHeaderString());
         }
 
-        if (sizeof($this->getHeaders())) {
+        if (count($this->getHeaders())) {
             $this->setOption(CURLOPT_HTTPHEADER, $this->makeFormattedHeaderArray());
         }
 

@@ -185,8 +185,6 @@ class Response extends AbstractHttp implements ResponseContract
 
     /**
      * Add headers from the response to the header collection.
-     *
-     * @return $this
      */
     private function parseHeadersFromResponse()
     {
@@ -208,19 +206,15 @@ class Response extends AbstractHttp implements ResponseContract
                 }
             }
         }
-
-        return $this;
     }
 
     /**
      * Put cookies from the response into the cookiejar.
-     *
-     * @return $this
      */
     private function parseCookiesFromResponse()
     {
         if (preg_match_all('/(?:Set-Cookie:\s)(.+)\n/', $this->rawHeader, $cookies, PREG_SET_ORDER) === false) {
-            return $this;
+            return;
         }
 
         $this->truncateCookieJar();
@@ -263,7 +257,5 @@ class Response extends AbstractHttp implements ResponseContract
                 $this->putCookie($cookieKey, $cookieValue);
             }
         }
-
-        return $this;
     }
 }
