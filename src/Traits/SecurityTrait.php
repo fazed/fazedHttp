@@ -1,6 +1,6 @@
 <?php
 
-namespace Fazed\FazedHttp;
+namespace Fazed\FazedHttp\Traits;
 
 trait SecurityTrait
 {
@@ -17,5 +17,5 @@ trait SecurityTrait
         ]);
 
         return $this;
-    }   
+    }
 }

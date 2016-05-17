@@ -1,6 +1,6 @@
 <?php
 
-namespace Fazed\FazedHttp;
+namespace Fazed\FazedHttp\Traits;
 
 trait CookieTrait
 {
@@ -29,6 +29,23 @@ trait CookieTrait
     {
         if (array_key_exists($cookie, $this->cookieJar)) {
             return $this->cookieJar[$cookie];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the value of a cookie from the cookiejar.
+     *
+     * @param  string  $cookie
+     * @return mixed
+     */
+    public function getCookieValue($cookie)
+    {
+        if (array_key_exists($cookie, $this->cookieJar)) {
+            return is_array($this->cookieJar[$cookie])
+                ? $this->cookieJar[$cookie]['value']
+                : $this->cookieJar[$cookie];
         }
 
         return null;
@@ -111,7 +128,7 @@ trait CookieTrait
     }
 
     /**
-     * Destroy the oldest cookie put in the jar.
+     * Delete the oldest cookie put in the jar.
      *
      * @return $this
      */
@@ -123,7 +140,7 @@ trait CookieTrait
     }
 
     /**
-     * Destroy the newest cookie put into the jar.
+     * Delete the newest cookie put into the jar.
      *
      * @return $this
      */
@@ -135,11 +152,41 @@ trait CookieTrait
     }
 
     /**
-     * Empty the cookiejar.
+     * Delete a cookie from the cookiejar.
+     *
+     * @param  string  $cookie
+     * @return $this
+     */
+    public function deleteCookie($cookie)
+    {
+        if (array_key_exists($header, $this->cookiejar)) {
+            unset($this->cookiejar[$cookie]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Delete multiple cookies from the cookiejar.
+     *
+     * @param  array  $cookies
+     * @return $this
+     */
+    public function deleteCookies(array $cookies)
+    {
+        foreach ($cookies as $cookie) {
+            $this->deleteCookie($cookie);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Truncate the cookiejar.
      *
      * @return $this
      */
-    public function emptyCookieJar()
+    public function truncateCookieJar()
     {
         $this->cookieJar = [];
 
@@ -151,7 +198,7 @@ trait CookieTrait
      *
      * @return string
      */
-    private function makeCookieHeaderString()
+    public function makeCookieHeaderString()
     {
         $cookieString = '';
 

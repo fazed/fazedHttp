@@ -4,10 +4,11 @@ namespace Fazed\FazedHttp;
 
 use Exception;
 use Fazed\FazedHttp\Response;
-use Fazed\FazedHttp\AbstractHttp;
-use Fazed\FazedHttp\SecurityTrait;
+use Fazed\FazedHttp\Traits\SecurityTrait;
+use Fazed\FazedHttp\Abstracts\AbstractHttp;
+use Fazed\FazedHttp\Contracts\RequestContract;
 
-class Request extends AbstractHttp
+class Request extends AbstractHttp implements RequestContract
 {
     use SecurityTrait;
 
@@ -85,10 +86,26 @@ class Request extends AbstractHttp
     }
 
     /**
+     * Create a new Request instance for quick access.
+     *
+     * @param  string $method
+     * @param  string $body
+     * @param  array  $headers
+     * @param  array  $cookies
+     * @param  array  $options
+     * @return $this
+     */
+    public static function makeRequest($method, $url, $body = '', $headers = [], $cookies = [], $options = [])
+    {
+        return static::make($method, $url, $body, $options)
+            ->setHeaders($headers)
+            ->setCookies($cookies);
+    }
+
+    /**
      * Send a GET request with minimal configuration.
      *
      * @param  string $url
-     * @param  string $body
      * @param  array  $headers
      * @param  array  $cookies
      * @param  array  $options
@@ -96,7 +113,7 @@ class Request extends AbstractHttp
      */
     public static function get($url, $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::METHOD_GET, $url, '', $headers, $cookies, $options)->send();
+        return static::makeRequest(static::METHOD_GET, $url, '', $headers, $cookies, $options)->send();
     }
 
     /**
@@ -111,7 +128,7 @@ class Request extends AbstractHttp
      */
     public static function post($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::POST, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::POST, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -126,7 +143,7 @@ class Request extends AbstractHttp
      */
     public static function put($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::PUT, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::PUT, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -141,7 +158,7 @@ class Request extends AbstractHttp
      */
     public static function patch($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::PATCH, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::PATCH, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -156,24 +173,7 @@ class Request extends AbstractHttp
      */
     public static function delete($url, $body = '', $headers = [], $cookies = [], $options = [])
     {
-        return static::makeQuickRequest(static::DELETE, $url, $body, $headers, $cookies, $options)->send();
-    }
-
-    /**
-     * Create a new Request instance for quick access.
-     *
-     * @param  string $method
-     * @param  string $body
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
-     * @return $this
-     */
-    private static function makeQuickRequest($method, $url, $body = '', $headers = [], $cookies = [], $options = [])
-    {
-        return static::make($method, $url, $body, $options)
-            ->setHeaders($headers)
-            ->setCookies($cookies);
+        return static::makeRequest(static::DELETE, $url, $body, $headers, $cookies, $options)->send();
     }
 
     /**
@@ -333,7 +333,7 @@ class Request extends AbstractHttp
      * @param  array $options
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         foreach ($options as $key=>$value) {
             $this->requestOptions[$key] = $value;
@@ -351,14 +351,16 @@ class Request extends AbstractHttp
     public function send()
     {
         $request = $this->prepareRequest();
-
         $response = curl_exec($request);
+        $requestInfo = curl_getinfo($request);
 
         if ($errorNo = curl_errno($request)) {
             throw new Exception(sprintf('An error occured: %s', curl_error($request)));
         }
 
-        return Response::make($response, $this->expectsType, $request);
+        curl_close($request);
+
+        return Response::make($response, $this->expectsType, $requestInfo);
     }
 
     /**

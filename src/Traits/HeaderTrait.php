@@ -1,6 +1,6 @@
 <?php
 
-namespace Fazed\FazedHttp;
+namespace Fazed\FazedHttp\Traits;
 
 trait HeaderTrait
 {
@@ -24,8 +24,8 @@ trait HeaderTrait
     public function setAuthorizationHeader($type, $digest)
     {
         $this->putHeader('Authorization', sprintf('%s %s', $type, $digest));
-        
-        return $this;   
+
+        return $this;
     }
 
     /**
@@ -130,7 +130,7 @@ trait HeaderTrait
     }
 
     /**
-     * Destory the oldest header put in the collection.
+     * Delete the oldest header put in the collection.
      *
      * @return $this
      */
@@ -142,7 +142,7 @@ trait HeaderTrait
     }
 
     /**
-     * Destroy the newest header put into the collection.
+     * Delete the newest header put into the collection.
      *
      * @return $this
      */
@@ -154,11 +154,41 @@ trait HeaderTrait
     }
 
     /**
+     * Delete a header from the collection.
+     *
+     * @param  string  $header
+     * @return $this
+     */
+    public function deleteHeader($header)
+    {
+        if (array_key_exists($header, $this->headerCollection)) {
+            unset($this->headerCollection[$header]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Delete multiple headers from the collection.
+     *
+     * @param  array  $headers
+     * @return $this
+     */
+    public function deleteHeaders(array $headers)
+    {
+        foreach ($headers as $header) {
+            $this->deleteHeader($header);
+        }
+
+        return $this;
+    }
+
+    /**
      * Empty the header collection.
      *
      * @return $this
      */
-    public function emptyHeaderJar()
+    public function truncateHeaderCollection()
     {
         $this->headerCollection = [];
 
@@ -170,7 +200,7 @@ trait HeaderTrait
      *
      * @return string
      */
-    private function makeFormattedHeaderString()
+    public function makeFormattedHeaderString()
     {
         $formattedString = '';
 
@@ -186,7 +216,7 @@ trait HeaderTrait
      *
      * @return array
      */
-    private function makeFormattedHeaderArray()
+    public function makeFormattedHeaderArray()
     {
         $formattedHeaders = [];
 
