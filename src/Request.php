@@ -103,7 +103,7 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Send a GET request with minimal configuration.
+     * Compose a GET request.
      *
      * @param  string $url
      * @return Request
@@ -114,7 +114,7 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Send a POST request with minimal configuration.
+     * Compose a POST request.
      *
      * @param  string $url
      * @param  string $body
@@ -126,11 +126,11 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Send a PUT request with minimal configuration.
+     * Compose a PUT request.
      *
      * @param  string $url
      * @param  string $body
-     * @return Response
+     * @return Request
      */
     public static function put($url, $body = '')
     {
@@ -138,11 +138,11 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Send a PATCH request with minimal configuration.
+     * Compose a PATCH request.
      *
      * @param  string $url
      * @param  string $body
-     * @return Response
+     * @return Request
      */
     public static function patch($url, $body = '')
     {
@@ -150,11 +150,11 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Send a DELETE request with minimal configuration.
+     * Compose a DELETE request.
      *
      * @param  string $url
      * @param  string $body
-     * @return Response
+     * @return Request
      */
     public static function delete($url, $body = '')
     {
