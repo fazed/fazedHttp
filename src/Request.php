@@ -106,14 +106,11 @@ class Request extends AbstractHttp implements RequestContract
      * Send a GET request with minimal configuration.
      *
      * @param  string $url
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
-     * @return Response
+     * @return Request
      */
-    public static function get($url, $headers = [], $cookies = [], $options = [])
+    public static function get($url)
     {
-        return static::makeRequest(static::METHOD_GET, $url, '', $headers, $cookies, $options)->send();
+        return static::makeRequest(static::METHOD_GET, $url);
     }
 
     /**
@@ -121,14 +118,11 @@ class Request extends AbstractHttp implements RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
-     * @return Response
+     * @return Request
      */
-    public static function post($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function post($url, $body = '')
     {
-        return static::makeRequest(static::POST, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::POST, $url, $body);
     }
 
     /**
@@ -136,14 +130,11 @@ class Request extends AbstractHttp implements RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
      * @return Response
      */
-    public static function put($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function put($url, $body = '')
     {
-        return static::makeRequest(static::PUT, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::PUT, $url, $body);
     }
 
     /**
@@ -151,14 +142,11 @@ class Request extends AbstractHttp implements RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
      * @return Response
      */
-    public static function patch($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function patch($url, $body = '')
     {
-        return static::makeRequest(static::PATCH, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::PATCH, $url, $body);
     }
 
     /**
@@ -166,14 +154,11 @@ class Request extends AbstractHttp implements RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @param  array  $headers
-     * @param  array  $cookies
-     * @param  array  $options
      * @return Response
      */
-    public static function delete($url, $body = '', $headers = [], $cookies = [], $options = [])
+    public static function delete($url, $body = '')
     {
-        return static::makeRequest(static::DELETE, $url, $body, $headers, $cookies, $options)->send();
+        return static::makeRequest(static::DELETE, $url, $body);
     }
 
     /**
