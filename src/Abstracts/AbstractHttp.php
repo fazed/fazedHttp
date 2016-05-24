@@ -7,7 +7,7 @@ use Fazed\FazedHttp\Traits\CookieTrait;
 use Fazed\FazedHttp\Contracts\HeaderContract;
 use Fazed\FazedHttp\Contracts\CookieContract;
 
-class AbstractHttp implements HeaderContract, CookieContract
+abstract class AbstractHttp implements HeaderContract, CookieContract
 {
     use HeaderTrait, CookieTrait;
 
