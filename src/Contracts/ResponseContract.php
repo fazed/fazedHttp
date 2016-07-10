@@ -5,7 +5,7 @@ namespace Fazed\FazedHttp\Contracts;
 interface ResponseContract
 {
     /**
-     * Staticly create a new Response instance.
+     * Statically create a new Response instance.
      *
      * @param string   $data
      * @param string   $expectedType

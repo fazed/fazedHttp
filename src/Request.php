@@ -3,7 +3,6 @@
 namespace Fazed\FazedHttp;
 
 use Exception;
-use Fazed\FazedHttp\Response;
 use Fazed\FazedHttp\Traits\SecurityTrait;
 use Fazed\FazedHttp\Abstracts\AbstractHttp;
 use Fazed\FazedHttp\Contracts\RequestContract;
@@ -62,6 +61,7 @@ class Request extends AbstractHttp implements RequestContract
      * @param  string $method
      * @param  string $url
      * @param  string $body
+     * @param  array   $options
      */
     public function __construct($method, $url, $body = '', $options = [])
     {
@@ -73,7 +73,7 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Staticly create a new Request instance.
+     * Statically create a new Request instance.
      *
      * @param  string $method
      * @param  string $url
@@ -342,7 +342,7 @@ class Request extends AbstractHttp implements RequestContract
         $requestInfo = curl_getinfo($request);
 
         if ($errorNo = curl_errno($request)) {
-            throw new Exception(sprintf('An error occured: %s', curl_error($request)));
+            throw new Exception(sprintf('An error occurred: %s', curl_error($request)));
         }
 
         curl_close($request);

@@ -69,7 +69,7 @@ class Response extends AbstractHttp implements ResponseContract
     }
 
     /**
-     * Staticly create a new Response instance.
+     * Statically create a new Response instance.
      *
      * @param  string $data
      * @param  string $expectedType
@@ -208,7 +208,7 @@ class Response extends AbstractHttp implements ResponseContract
     }
 
     /**
-     * Put cookies from the response into the cookiejar.
+     * Put cookies from the response into the cookie jar.
      */
     private function parseCookiesFromResponse()
     {

@@ -5,12 +5,13 @@ namespace Fazed\FazedHttp\Contracts;
 interface RequestContract
 {
     /**
-     * Staticly create a new Request instance.
+     * Statically create a new Request instance.
      *
      * @param  string $method
      * @param  string $url
      * @param  string $body
-     * @return Request
+     * @param  array  $options
+     * @return RequestContract
      */
     public static function make($method, $url, $body, $options);
 
@@ -19,10 +20,11 @@ interface RequestContract
      *
      * @param  string $method
      * @param  string $body
+     * @param  string $url
      * @param  array  $headers
      * @param  array  $cookies
      * @param  array  $options
-     * @return Request
+     * @return RequestContract
      */
     public static function makeRequest($method, $url, $body, $headers, $cookies, $options);
 
@@ -30,7 +32,7 @@ interface RequestContract
      * Compose a GET request.
      *
      * @param  string $url
-     * @return Request
+     * @return RequestContract
      */
     public static function get($url);
 
@@ -39,7 +41,7 @@ interface RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @return Request
+     * @return RequestContract
      */
     public static function post($url, $body = '');
 
@@ -48,7 +50,7 @@ interface RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @return Request
+     * @return RequestContract
      */
     public static function put($url, $body = '');
 
@@ -57,7 +59,7 @@ interface RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @return Request
+     * @return RequestContract
      */
     public static function patch($url, $body = '');
 
@@ -66,7 +68,7 @@ interface RequestContract
      *
      * @param  string $url
      * @param  string $body
-     * @return Request
+     * @return RequestContract
      */
     public static function delete($url, $body = '');
 
@@ -75,7 +77,7 @@ interface RequestContract
      *
      * @param  string $username
      * @param  string $password
-     * @return Request
+     * @return RequestContract
      */
     public function setBasicAuthentication($username, $password);
 
@@ -84,7 +86,7 @@ interface RequestContract
      *
      * @param  string $username
      * @param  string $password
-     * @return Request
+     * @return RequestContract
      */
     public function setDigestAuthentication($username, $password);
 
@@ -92,7 +94,7 @@ interface RequestContract
      * Set the referer of the request.
      *
      * @param  string $referer
-     * @return Request
+     * @return RequestContract
      */
     public function setReferer($referer);
 
@@ -100,7 +102,7 @@ interface RequestContract
      * Set the user agent of the request.
      *
      * @param  string $agent
-     * @return Request
+     * @return RequestContract
      */
     public function setUserAgent($agent);
 
@@ -108,7 +110,7 @@ interface RequestContract
      * Set the request content mimetype.
      *
      * @param  string $type
-     * @return Request
+     * @return RequestContract
      */
     public function sends($type);
 
@@ -116,7 +118,7 @@ interface RequestContract
      * Set the expected response format.
      *
      * @param  string $type
-     * @return Request
+     * @return RequestContract
      */
     public function expects($type);
 
@@ -124,7 +126,7 @@ interface RequestContract
      * Set the body for the request;
      *
      * @param  string $body
-     * @return Request
+     * @return RequestContract
      */
     public function setBody($body);
 
@@ -133,7 +135,7 @@ interface RequestContract
      *
      * @param  int    $option
      * @param  string $value
-     * @return Request
+     * @return RequestContract
      */
     public function setOption($option, $value);
 
@@ -141,15 +143,15 @@ interface RequestContract
      * Set additional curl options.
      *
      * @param  array $options
-     * @return Request
+     * @return RequestContract
      */
     public function setOptions(array $options);
 
     /**
      * Execute the request.
      *
-     * @return Response
-     * @throws Exception
+     * @return ResponseContract
+     * @throws \Exception
      */
     public function send();
 }
