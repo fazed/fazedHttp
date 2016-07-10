@@ -129,7 +129,6 @@ class Response
     /**
      * Format the request response to the expected format.
      *
-     * @param  string $response
      * @return mixed
      */
     private function formatByExpected()

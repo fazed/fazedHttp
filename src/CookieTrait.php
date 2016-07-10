@@ -88,7 +88,7 @@ trait CookieTrait
      */
     public function appendCookie($cookie, $value)
     {
-        if (! array_key_exists($cookie)) {
+        if (! array_key_exists($cookie, $this->cookieJar)) {
             $this->cookieJar[$cookie] = $value;
         }
 
