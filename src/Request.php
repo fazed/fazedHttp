@@ -78,6 +78,7 @@ class Request extends AbstractHttp implements RequestContract
      * @param  string $method
      * @param  string $url
      * @param  string $body
+     * @param  array  $options
      * @return $this
      */
     public static function make($method, $url, $body = '', $options = [])
@@ -89,6 +90,7 @@ class Request extends AbstractHttp implements RequestContract
      * Create a new Request instance for quick access.
      *
      * @param  string $method
+     * @param  string $url
      * @param  string $body
      * @param  array  $headers
      * @param  array  $cookies
@@ -122,7 +124,7 @@ class Request extends AbstractHttp implements RequestContract
      */
     public static function post($url, $body = '')
     {
-        return static::makeRequest(static::POST, $url, $body);
+        return static::makeRequest(static::METHOD_POST, $url, $body);
     }
 
     /**
@@ -134,7 +136,7 @@ class Request extends AbstractHttp implements RequestContract
      */
     public static function put($url, $body = '')
     {
-        return static::makeRequest(static::PUT, $url, $body);
+        return static::makeRequest(static::METHOD_PUT, $url, $body);
     }
 
     /**
@@ -146,7 +148,7 @@ class Request extends AbstractHttp implements RequestContract
      */
     public static function patch($url, $body = '')
     {
-        return static::makeRequest(static::PATCH, $url, $body);
+        return static::makeRequest(static::METHOD_PATCH, $url, $body);
     }
 
     /**
@@ -158,7 +160,7 @@ class Request extends AbstractHttp implements RequestContract
      */
     public static function delete($url, $body = '')
     {
-        return static::makeRequest(static::DELETE, $url, $body);
+        return static::makeRequest(static::METHOD_DELETE, $url, $body);
     }
 
     /**
@@ -351,7 +353,7 @@ class Request extends AbstractHttp implements RequestContract
     /**
      * Prepares the current request before sending.
      *
-     * @return cURL
+     * @return resource
      */
     private function prepareRequest()
     {

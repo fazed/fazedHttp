@@ -128,7 +128,7 @@ class Response extends AbstractHttp implements ResponseContract
      */
     public function getRequestInfo()
     {
-        return $this->requestInfo;
+        return $this->responseInfo;
     }
 
     /**
@@ -139,8 +139,8 @@ class Response extends AbstractHttp implements ResponseContract
      */
     public function getRequestInfoByKey($key)
     {
-        if (array_key_exists($key, $this->requestInfo)) {
-            return $this->requestInfo[$key];
+        if (array_key_exists($key, $this->responseInfo)) {
+            return $this->responseInfo[$key];
         }
 
         return false;
@@ -171,7 +171,6 @@ class Response extends AbstractHttp implements ResponseContract
     /**
      * Format the request response to the expected format.
      *
-     * @param  string $response
      * @return mixed
      */
     private function formatByExpected()
