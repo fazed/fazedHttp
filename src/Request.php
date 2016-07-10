@@ -468,7 +468,7 @@ class Request extends AbstractHttp implements RequestContract
         $payload = '';
 
         foreach($this->body as $key=>$value) {
-            $payload .= sprintf('%s=%s&', $key, $value);
+            $payload .= sprintf('%s=%s&', $key, urlencode($value));
         }
 
         return rtrim($payload, '&');
