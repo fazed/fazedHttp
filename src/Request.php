@@ -41,7 +41,7 @@ class Request extends AbstractHttp implements RequestContract
     private $url;
 
     /**
-     * @var string
+     * @var string|array
      */
     private $body;
 
@@ -288,7 +288,7 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Set the body for the request;
+     * Set the body for the request.
      *
      * @param  string $body
      * @return $this
@@ -365,9 +365,15 @@ class Request extends AbstractHttp implements RequestContract
         $this->setOption(CURLOPT_CUSTOMREQUEST, $this->method);
 
         if ($this->method !== static::METHOD_GET) {
-            $this->setOption(CURLOPT_POSTFIELDS, $this->body);
+            $payload = is_array($this->body) ? $this->inflatePayload() : $this->body;
 
-            $this->putHeader('Content-Length', strlen($this->body));
+            $this->setOption(CURLOPT_POSTFIELDS, $payload);
+            $this->putHeader('Content-Length', strlen($payload));
+
+            // TODO: count for non-array payloads
+            if (is_array($this->body)) {
+                $this->setOption(CURLOPT_POST, count($this->body));
+            }
 
             if ($this->sendsType) {
                 $this->putHeader('Content-Type', $this->resolveContentType());
@@ -395,8 +401,8 @@ class Request extends AbstractHttp implements RequestContract
     private function resolveContentType()
     {
         switch ($this->sendsType) {
-            case 'json': return 'application/json'; break;
             case 'xml' : return 'application/xml';  break;
+            case 'json': return 'application/json'; break;
         }
 
         return null;
@@ -432,5 +438,39 @@ class Request extends AbstractHttp implements RequestContract
         }
 
         curl_setopt_array($request, $this->requestOptions);
+    }
+
+    /**
+     * Inflate the payload according to the set content-type.
+     *
+     * @return string
+     */
+    private function inflatePayload()
+    {
+        $payload = '';
+
+        switch ($this->sendsType) {
+            // TODO: create an XML-case.
+            case 'json': $payload = json_encode($this->body); break;
+            default: $this->makePayloadString(); break;
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Make a string representation of the body.
+     *
+     * @return string
+     */
+    private function makePayloadString()
+    {
+        $payload = '';
+
+        foreach($this->body as $key=>$value) {
+            $payload .= sprintf('%s=%s&', $key, $value);
+        }
+
+        return rtrim($payload, '&');
     }
 }
