@@ -20,6 +20,17 @@ trait CookieTrait
     }
 
     /**
+     * Return whether the cookie exists.
+     *
+     * @param  string $cookie
+     * @return bool
+     */
+    public function hasCookie($cookie)
+    {
+        return array_key_exists($cookie, $this->cookieJar);
+    }
+
+    /**
      * Get a cookie from the cookiejar.
      *
      * @param  mixed  $cookie
@@ -105,7 +116,7 @@ trait CookieTrait
      */
     public function appendCookie($cookie, $value)
     {
-        if (! array_key_exists($cookie)) {
+        if (! array_key_exists($cookie, $this->cookieJar)) {
             $this->cookieJar[$cookie] = $value;
         }
 
@@ -159,8 +170,8 @@ trait CookieTrait
      */
     public function deleteCookie($cookie)
     {
-        if (array_key_exists($header, $this->cookiejar)) {
-            unset($this->cookiejar[$cookie]);
+        if (array_key_exists($cookie, $this->cookieJar)) {
+            unset($this->cookieJar[$cookie]);
         }
 
         return $this;

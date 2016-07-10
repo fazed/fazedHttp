@@ -39,6 +39,17 @@ trait HeaderTrait
     }
 
     /**
+     * Return whether the header exists.
+     *
+     * @param  string $header
+     * @return bool
+     */
+    public function hasHeader($header)
+    {
+        return array_key_exists($header, $this->headerCollection);
+    }
+
+    /**
      * Get a header from the header collection.
      *
      * @param  mixed  $header
@@ -107,7 +118,7 @@ trait HeaderTrait
      */
     public function appendHeader($header, $value)
     {
-        if (! array_key_exists($header)) {
+        if (! array_key_exists($header, $this->headerCollection)) {
             $this->headerCollection[$header] = $value;
         }
 
