@@ -9,7 +9,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+      "nesbot/carbon": "*"
+    },
     "autoload": {
         "psr-4": {
             "Fazed\\FazedHttp\\": "src/"

@@ -188,14 +188,14 @@ class Request extends AbstractHttp implements RequestContract
     }
 
     /**
-     * Set the referer of the request.
+     * Set the referrer of the request.
      *
-     * @param  string $referer
+     * @param  string $referrer
      * @return $this
      */
-    public function setReferer($referer)
+    public function setReferrer($referrer)
     {
-        $this->setOption(CURLOPT_REFERER, $referer);
+        $this->setOption(CURLOPT_REFERER, $referrer);
 
         return $this;
     }

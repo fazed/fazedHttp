@@ -10,7 +10,7 @@ trait CookieTrait
     private $cookieJar = [];
 
     /**
-     * Get all of the cookies in the cookiejar.
+     * Get all of the cookies in the cookie jar.
      *
      * @return array
      */
@@ -31,7 +31,7 @@ trait CookieTrait
     }
 
     /**
-     * Get a cookie from the cookiejar.
+     * Get a cookie from the cookie jar.
      *
      * @param  mixed  $cookie
      * @return mixed
@@ -46,7 +46,7 @@ trait CookieTrait
     }
 
     /**
-     * Get the value of a cookie from the cookiejar.
+     * Get the value of a cookie from the cookie jar.
      *
      * @param  string  $cookie
      * @return mixed
@@ -76,7 +76,7 @@ trait CookieTrait
     }
 
     /**
-     * Add a cookie to the cookiejar crushing
+     * Add a cookie to the cookie jar crushing
      * the cookie with the same identifier.
      *
      * @param  mixed  $cookie
@@ -91,7 +91,7 @@ trait CookieTrait
     }
 
     /**
-     * Add multiple cookies to the cookiejar
+     * Add multiple cookies to the cookie jar
      * crushing the existing cookies with
      * the same identifier.
      *
@@ -108,7 +108,7 @@ trait CookieTrait
     }
 
     /**
-     * Add a single cookie to the cookiejar.
+     * Add a single cookie to the cookie jar.
      *
      * @param  mixed  $cookie
      * @param  mixed  $value
@@ -124,7 +124,7 @@ trait CookieTrait
     }
 
     /**
-     * Add multiple cookies to the cookiejar.
+     * Add multiple cookies to the cookie jar.
      *
      * @param  array  $cookies
      * @return $this
@@ -163,7 +163,7 @@ trait CookieTrait
     }
 
     /**
-     * Delete a cookie from the cookiejar.
+     * Delete a cookie from the cookie jar.
      *
      * @param  string  $cookie
      * @return $this
@@ -178,7 +178,7 @@ trait CookieTrait
     }
 
     /**
-     * Delete multiple cookies from the cookiejar.
+     * Delete multiple cookies from the cookie jar.
      *
      * @param  array  $cookies
      * @return $this
@@ -193,7 +193,7 @@ trait CookieTrait
     }
 
     /**
-     * Truncate the cookiejar.
+     * Truncate the cookie jar.
      *
      * @return $this
      */
@@ -214,9 +214,9 @@ trait CookieTrait
         $cookieString = '';
 
         foreach ($this->cookieJar as $cookie=>$value) {
-            $cookieString .= sprintf('Set-Cookie: %s=%s;', $cookie, $value);
+            $cookieString .= sprintf('%s=%s; ', $cookie, $value);
         }
 
-        return $cookieString;
+        return rtrim($cookieString, '; ');
     }
 }
