@@ -91,12 +91,12 @@ interface RequestContract
     public function setDigestAuthentication($username, $password);
 
     /**
-     * Set the referer of the request.
+     * Set the referrer of the request.
      *
-     * @param  string $referer
+     * @param  string $referrer
      * @return RequestContract
      */
-    public function setReferer($referer);
+    public function setReferrer($referrer);
 
     /**
      * Set the user agent of the request.
